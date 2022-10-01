@@ -2,6 +2,7 @@ from tkinter import *
 window = Tk()
 window.title("Calculator")
 window.geometry("208x316")
+window.resizable(False, False)
 
 math_string = StringVar()
 display_text = ""
@@ -22,6 +23,11 @@ def clear():
     math_string.set("")
     display_text = ""
 
+def backspace():
+    global display_text
+    display_text = display_text[:-1]
+    math_string.set(display_text)
+
 def close():
     window.destroy()
 
@@ -41,7 +47,8 @@ sym_divide = Button(window, text="/", height=3, width=6, command=lambda: numbr("
 sym_multi = Button(window, text="*", height=3, width=6, command=lambda: numbr("*"))
 dot = Button(window, text=".", height=3, width=6, command=lambda: numbr("."))
 num_sum = Button(window, text="=", height=3, width=6, command=symbol_sum)
-clear = Button(window, text="C", height=3, width=6, command=clear)
+cleared = Button(window, text="C", height=3, width=6, command=clear)
+back_space = Button(window, text="\U0001F814", height=3, width=6, command=backspace)
 
 
 
@@ -60,13 +67,14 @@ sym_minus.grid(row=3, column=3)
 sym_divide.grid(row=1, column=3)
 sym_multi.grid(row=2, column=3)
 num_sum.grid(row=5, column=3)
-clear.grid(row=5, column=0)
+cleared.grid(row=5, column=0)
 dot.grid(row=5, column=2)
+back_space.grid(row=1, column=2)
 
 window.bind("<Escape>", lambda event: close())
 window.bind("<Return>", lambda event: symbol_sum())
 
-all_sum = Label(window, textvariable=math_string, bg="cyan", height=2, width=20)
+all_sum = Label(window, textvariable=math_string, height=2, relief=SUNKEN, width=27, bd=4,)
 all_sum.grid(row=0, columnspan=10)
 
 window.mainloop()
