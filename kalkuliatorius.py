@@ -1,7 +1,7 @@
 from tkinter import *
 window = Tk()
 window.title("Calculator")
-window.geometry("208x316")
+window.geometry("206x316")
 window.resizable(False, False)
 
 math_string = StringVar()
@@ -14,9 +14,14 @@ def numbr(numerica):
 
 def symbol_sum():
     global display_text
-    sum_all = str(eval(display_text))
-    math_string.set(sum_all)
-    display_text = sum_all
+    try:
+        sum_all = str(eval(display_text))
+        math_string.set(sum_all)
+        display_text = sum_all
+    except ZeroDivisionError:
+        math_string.set("Cannot divide by zero")
+        display_text = ""
+
 
 def clear():
     global display_text
@@ -50,8 +55,6 @@ num_sum = Button(window, text="=", height=3, width=6, command=symbol_sum)
 cleared = Button(window, text="C", height=3, width=6, command=clear)
 back_space = Button(window, text="\U0001F814", height=3, width=6, command=backspace)
 
-
-
 calc_1.grid(row=4 , column=0)
 calc_2.grid(row=4 , column=1)
 calc_3.grid(row=4 , column=2)
@@ -73,6 +76,13 @@ back_space.grid(row=1, column=2)
 
 window.bind("<Escape>", lambda event: close())
 window.bind("<Return>", lambda event: symbol_sum())
+window.bind("<BackSpace>", lambda event: backspace())
+
+meniu = Menu(window)
+window.config(menu=meniu)
+submeniukas = Menu(meniu, tearoff=0)
+meniu.add_cascade(label="Menu", menu=submeniukas)
+submeniukas.add_command(label="Close \u274C", command=close)
 
 all_sum = Label(window, textvariable=math_string, height=2, relief=SUNKEN, width=27, bd=4,)
 all_sum.grid(row=0, columnspan=10)
